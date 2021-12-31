@@ -1,0 +1,28 @@
+{
+  "name": "benoit_puech_7_31122021",
+  "version": "1.0.0",
+  "description": "Groupomania company social network",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/programmeur77/BenoitPuech_7_31122021.git"
+  },
+  "author": "Benoît Puech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/programmeur77/BenoitPuech_7_31122021/issues"
+  },
+  "homepage": "https://github.com/programmeur77/BenoitPuech_7_31122021#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "bcrypt-node": "^0.1.0",
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15"
+  }
+}
