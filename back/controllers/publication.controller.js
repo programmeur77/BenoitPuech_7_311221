@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllPublications = (req, res) => {
   const getAllPublicationsRequest =
-    'SELECT lastName, firstName, posts.postContent, posts.imageUrl, posts.post_date FROM user JOIN posts ON posts.userId = user.id WHERE posts.active = 1';
+    'SELECT user.id, lastName, firstName, posts.postContent, posts.imageUrl, posts.post_date FROM user JOIN posts ON posts.userId = user.id WHERE posts.active = 1';
 
   db.query(getAllPublicationsRequest, (error, result) => {
     if (!error) return res.status(200).json(result);
@@ -49,7 +49,7 @@ exports.getOnePublication = (req, res) => {
   });
 };
 
-exports.updatePublication = (req, res) => {
+exports.modifyPublication = (req, res) => {
   const updateQuery = `UPDATE posts SET postContent = "${req.body.postContent}", imageUrl = "${req.body.imageUrl}" WHERE id = ${req.params.id} AND userId = ${req.body.userId}`;
 
   if (req.body.userId === req.auth.userId) {
