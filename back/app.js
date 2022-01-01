@@ -9,7 +9,7 @@ const commentRoutes = require('./routes/comment.routes');
 
 app.use(express.json());
 
-app.use('/api/auth', userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/publications', publicationRoutes);
 app.use('/api/comments', commentRoutes);
 
