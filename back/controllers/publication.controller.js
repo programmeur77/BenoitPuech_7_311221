@@ -74,7 +74,7 @@ exports.modifyPublication = (req, res) => {
 };
 
 exports.deletePublication = (req, res) => {
-  const selectQuery = `SELECT userId, admin FROM posts`;
+  const selectQuery = `SELECT userId, user.admin FROM posts JOIN user ON posts.userId = user.id WHERE posts.id = ${req.params.id}`;
   const updateQuery = `UPDATE posts SET active = 0 WHERE id = ${req.params.id}`;
   db.query(selectQuery, (error, result) => {
     if (!error) {
@@ -96,7 +96,7 @@ exports.deletePublication = (req, res) => {
         });
       } else {
         return res.status(401).json({
-          message: 'Unauthorized request. You have to authenticate first'
+          message: 'Unauthorized request'
         });
       }
     } else {
