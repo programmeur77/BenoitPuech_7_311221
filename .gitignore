@@ -2,3 +2,4 @@
 .prettierrc
 .DS_Store
 /back/.env
+.vscode
