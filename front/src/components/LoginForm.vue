@@ -1,82 +1,71 @@
 <template>
-  <section>
-    <h1 class="section__title">
-      Bienvenue sur votre réseau social d'entreprise
-    </h1>
-    <form class="login" @submit="postData" method="post">
-      <div id="form__errorMsg"></div>
+  <form class="login" @submit="postData" method="post">
+    <div id="form__errorMsg"></div>
 
-      <div
-        class="form__identity"
-        id="formIdentity"
-        v-if="signupStatus === false"
-      >
-        <div class="form__names">
-          <label for="nom" class="form__legend">Nom :</label><br />
-          <input
-            type="text"
-            name="lastName"
-            id="lastName"
-            placeholder="Nom"
-            class="form__field form__field--larger"
-          />
-        </div>
-
-        <div class="form__name">
-          <label for="prenom" class="form__legend">Prénom :</label><br />
-          <input
-            type="text"
-            name="firstName"
-            id="firstName"
-            placeholder="Prénom"
-            class="form__field form__field--larger"
-          />
-        </div>
+    <div class="form__identity" id="formIdentity" v-if="signupStatus === false">
+      <div class="form__names">
+        <label for="nom" class="form__legend">Nom :</label><br />
+        <input
+          type="text"
+          name="lastName"
+          id="lastName"
+          placeholder="Nom"
+          class="form__field form__field--larger"
+        />
       </div>
-      <label for="email" class="form__legend">Email :</label>
-      <input
-        type="text"
-        name="email"
-        id="email"
-        placeholder="exemple@exemple.com"
-        class="form__field"
-        v-model="posts.email"
-      />
-      <div id="password_error"></div>
 
-      <label for="password" class="form__legend">Mot de passe :</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="Mot de passe"
-        class="form__field"
-        v-model="posts.password"
-      />
-      <div id="password_error"></div>
+      <div class="form__name">
+        <label for="prenom" class="form__legend">Prénom :</label><br />
+        <input
+          type="text"
+          name="firstName"
+          id="firstName"
+          placeholder="Prénom"
+          class="form__field form__field--larger"
+        />
+      </div>
+    </div>
+    <label for="email" class="form__legend">Email :</label>
+    <input
+      type="text"
+      name="email"
+      id="email"
+      placeholder="exemple@exemple.com"
+      class="form__field"
+      v-model="posts.email"
+    />
+    <div id="password_error"></div>
 
-      <div class="form__text">
-        <p class="form__signup" v-if="signupStatus === true">
-          Vous n'avez pas encore de compte ?
-          <span class="form__link" @click="signupStatus = false"
-            >S'inscrire</span
-          >
-        </p>
-        <p class="form__signup" v-if="signupStatus === false">
-          Vous avez déjà un compte ?
-          <span class="form__link" @click="signupStatus = true"
-            >Se connecter</span
-          >
-        </p>
-      </div>
-      <div class="form__submition">
-        <button class="form__submit" id="submit" v-if="signupStatus === true">
-          Se connecter
-        </button>
-        <button class="form__submit" id="submit" v-else>S'inscrire</button>
-      </div>
-    </form>
-  </section>
+    <label for="password" class="form__legend">Mot de passe :</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Mot de passe"
+      class="form__field"
+      v-model="posts.password"
+    />
+    <div id="password_error"></div>
+
+    <div class="form__text">
+      <p class="form__signup" v-if="signupStatus === true">
+        Vous n'avez pas encore de compte ?
+        <span class="form__link" @click="signupStatus = false">S'inscrire</span>
+      </p>
+      <p class="form__signup" v-if="signupStatus === false">
+        Vous avez déjà un compte ?
+        <span class="form__link" @click="signupStatus = true"
+          >Se connecter</span
+        >
+      </p>
+    </div>
+    <div class="form__submition">
+      <button class="form__submit" id="submit" v-if="signupStatus === true">
+        Se connecter
+      </button>
+      <button class="form__submit" id="submit" v-else>S'inscrire</button>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -86,6 +75,8 @@ export default {
   data() {
     return {
       posts: {
+        lastName: '',
+        firstName: '',
         email: '',
         password: ''
       },
@@ -95,37 +86,24 @@ export default {
   methods: {
     postData: function (event) {
       event.preventDefault();
-      axios
-        .post('http://localhost:3000/api/user/login', this.posts)
-        .then((data) => data)
-        .then((dataReturned) => {
-          if (dataReturned.status == 200) {
-            console.log(dataReturned.data);
-          } else if (dataReturned.status == 404) {
-            console.log(dataReturned.message);
-          }
-        });
+      if (this.signupStatus === true) {
+        axios
+          .post('http://localhost:3000/api/user/login', this.posts)
+          .then((data) => {
+            if (data.status === 200) {
+              this.$router.push('/welcome');
+            } else {
+              alert(data.status);
+            }
+          })
+          .catch((error) => console.log(error));
+      }
     }
   }
 };
 </script>
 
 <style>
-section {
-  width: 100%;
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  font-family: 'poppins';
-  border-radius: 5px;
-}
-
-.section__title {
-  width: 100%;
-  text-align: center;
-}
-
 form {
   width: 100%;
   margin-top: 30px;
