@@ -1,5 +1,10 @@
 /back/node_modules
-.prettierrc
-.DS_Store
 /back/.env
+
+#config files and directories
+/front/.eslintrc.js
+/front/babel.config.js
+/front/.browserslistrc
+.prettierrc
 .vscode
+.DS_Store
