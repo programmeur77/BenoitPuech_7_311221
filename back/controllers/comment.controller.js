@@ -1,6 +1,18 @@
 const { restart } = require('nodemon');
 const db = require('./../config/db');
 
+exports.getCommentCount = (req, res) => {
+  const getCountQuery = `SELECT COUNT(id) FROM comments WHERE postId = ${req.params.postId} AND active = 1`;
+
+  db.query(getCountQuery, (error, result) => {
+    if (!error) {
+      return res.status(201).json(result);
+    } else {
+      return res.status(500).json(error);
+    }
+  });
+};
+
 exports.getAllComments = (req, res) => {
   const firstGetJoinQuery = `SELECT firstName, lastName, comments.id, comments.commentContent, comments.comment_date FROM user JOIN comments ON user.id = comments.userId WHERE postId = ${req.params.postId} AND active = true`;
 
