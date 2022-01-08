@@ -9,6 +9,9 @@
 
 <script>
 import LoginForm from './../components/LoginForm.vue';
+
+document.title = "Home | Groupomania - Votre réseau social d'entreprise";
+
 export default {
   name: 'Home',
   components: {
@@ -17,14 +20,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 section {
   width: 100%;
   margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  font-family: 'poppins';
   border-radius: 5px;
 }
 
