@@ -91,9 +91,14 @@ export default {
           .post('http://localhost:3000/api/user/login', this.posts)
           .then((data) => {
             if (data.status === 200) {
+              const userInfo = data.data;
+              const userData = {
+                userId: userInfo.userId,
+                userToken: userInfo.token
+              };
+              const userInfoString = JSON.stringify(userData);
+              localStorage.setItem('userSession', userInfoString);
               this.$router.push('/welcome');
-            } else {
-              alert(data.status);
             }
           })
           .catch((error) => console.log(error));
@@ -103,7 +108,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 form {
   width: 100%;
   margin-top: 30px;
