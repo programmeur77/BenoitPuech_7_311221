@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllPublications = (req, res) => {
   const getAllPublicationsRequest =
-    'SELECT user.id AS userId, lastName, firstName, avatarUrl, posts.id AS postId, posts.postContent, posts.imageUrl, posts.post_date FROM user JOIN posts ON posts.userId = user.id WHERE posts.active = 1';
+    'SELECT user.id AS userId, lastName, firstName, avatarUrl, posts.id AS postId, posts.postContent, posts.imageUrl, posts.post_date, posts.comment_count FROM user JOIN posts ON posts.userId = user.id WHERE posts.active = 1';
 
   db.query(getAllPublicationsRequest, (error, result) => {
     if (!error) return res.status(200).json(result);
