@@ -1,18 +1,22 @@
 <template>
   <div v-if="result.length > 0">
+    <AddPostForm />
     <section
       v-for="postContent in result"
       :key="postContent.postId"
       class="publications"
     >
-      {{ (commentCount = getCommentCount(postContent.postId)) }}
       <div v-bind:data-id="postContent.postId" class="publications__card">
         <div class="publications__author" :data-user-id="postContent.userId">
           <img :src="postContent.avatarUrl" alt="Photo de profil" />&nbsp;
-          <span class="publications__author-profile">
+          <span
+            class="publications__author-profile"
+            @click="goToProfile(postContent.postId)"
+          >
             {{ postContent.firstName }} {{ postContent.lastName }}
           </span>
         </div>
+
         <div
           class="publications__content"
           v-if="
@@ -45,6 +49,10 @@
           <img :src="postContent.imageUrl" alt="Image de publication" />
         </div>
 
+        <div class="publications__date-time">
+          <p>Publié le {{ postContent.post_date }}</p>
+        </div>
+
         <div
           class="publications__like-comment-count"
           v-if="postContent.comment_count > 0"
@@ -65,15 +73,6 @@
             <span class="icon__legend">&nbsp;Commenter</span>
           </div>
         </div>
-
-        <div class="publications__add-comment" v-if="comment === true">
-          <textarea
-            name="comment"
-            class="add-comment__field"
-            id="comment"
-            placeholder="Commenter..."
-          ></textarea>
-        </div>
       </div>
     </section>
   </div>
@@ -83,6 +82,7 @@
 import axios from 'axios';
 import FaSolidHeart from './Heart.vue';
 import FaSolidComment from './CommentIcon.vue';
+import AddPostForm from './AddPost.vue';
 
 const userSessionData = JSON.parse(localStorage.getItem('userSession'));
 const sessionToken = userSessionData.userToken;
@@ -94,13 +94,13 @@ export default {
   name: 'Wall',
   components: {
     FaSolidHeart,
-    FaSolidComment
+    FaSolidComment,
+    AddPostForm
   },
   data() {
     return {
       result: [],
-      comment: false,
-      commentCount: 0
+      comment: false
     };
   },
   beforeMount() {
@@ -116,14 +116,8 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    getCommentCount: function (postId) {
-      axios
-        .get(`http://localhost:3000/api/comments/commentCount/${postId}`)
-        .then((result) => result.data)
-        .then((data) => {
-          return data;
-        })
-        .catch((error) => console.log(error));
+    goToProfile: function (userId) {
+      this.$router.push(`/profile/${userId}`);
     }
   }
 };
@@ -149,6 +143,12 @@ export default {
   cursor: pointer;
 }
 
+.publications__card .publications__date-time {
+  margin-top: -20px;
+  font-size: 0.8rem;
+  color: grey;
+}
+
 .publications__card .publications__like-comment-count {
   width: 92%;
   height: fit-content;
@@ -156,6 +156,12 @@ export default {
   padding: 5px;
   border-top: 1px solid white;
 }
+
+.publications__card .publications__comment-count {
+  margin-right: 15px;
+  text-align: right;
+}
+
 .publications__card .publications__like-comment {
   width: 95%;
   height: fit-content;
@@ -167,7 +173,8 @@ export default {
 }
 
 .publications__card .like-comment__like:hover,
-.publications__card .like-comment__comment:hover {
+.publications__card .like-comment__comment:hover,
+.publications__card .publications__comment-count:hover {
   cursor: pointer;
   color: #4b77be;
 }
