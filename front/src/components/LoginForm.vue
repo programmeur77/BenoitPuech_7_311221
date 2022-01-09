@@ -98,7 +98,7 @@ export default {
               };
               const userInfoString = JSON.stringify(userData);
               localStorage.setItem('userSession', userInfoString);
-              this.$router.push('/welcome');
+              this.$router.push('/wall');
             }
           })
           .catch((error) => console.log(error));
