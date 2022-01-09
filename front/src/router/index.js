@@ -8,10 +8,16 @@ const routes = [
     component: Home
   },
   {
-    name: 'welcome',
-    path: '/welcome',
+    name: 'Wall',
+    path: '/wall',
     component: () =>
       import(/* webpackChunkName: "about" */ './../views/Wall.vue')
+  },
+  {
+    name: 'Profile',
+    path: '/profile/:userId',
+    component: () =>
+      import(/* webpackChunkName: "about" */ './../views/Profile.vue')
   }
 ];
 
