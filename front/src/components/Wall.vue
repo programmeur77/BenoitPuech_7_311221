@@ -5,6 +5,7 @@
       :key="postContent.postId"
       class="publications"
     >
+      {{ (commentCount = getCommentCount(postContent.postId)) }}
       <div v-bind:data-id="postContent.postId" class="publications__card">
         <div class="publications__author" :data-user-id="postContent.userId">
           <img :src="postContent.avatarUrl" alt="Photo de profil" />&nbsp;
@@ -42,6 +43,15 @@
         >
           <p>{{ postContent.postContent }}</p>
           <img :src="postContent.imageUrl" alt="Image de publication" />
+        </div>
+
+        <div
+          class="publications__like-comment-count"
+          v-if="postContent.comment_count > 0"
+        >
+          <div class="publications__comment-count">
+            {{ postContent.comment_count }} commentaires
+          </div>
         </div>
 
         <div class="publications__like-comment">
@@ -90,7 +100,7 @@ export default {
     return {
       result: [],
       comment: false,
-      countComment: []
+      commentCount: 0
     };
   },
   beforeMount() {
@@ -103,24 +113,17 @@ export default {
         .then((data) => data.data)
         .then((publication) => {
           this.result = publication;
-          this.getCommentCount(publication);
         })
         .catch((error) => console.log(error));
     },
-    getCommentCount: function (publicationArray) {
-      for (let index in publicationArray) {
-        axios
-          .get(
-            `http://localhost:3000/api/comments/commentCount/${publicationArray[index].postId}`
-          )
-          .then((result) => {
-            this.countComment = result.data;
-            console.log(this.countComment.length);
-          })
-          .catch((error) => console.log(error));
-
-        console.log(this.countComment);
-      }
+    getCommentCount: function (postId) {
+      axios
+        .get(`http://localhost:3000/api/comments/commentCount/${postId}`)
+        .then((result) => result.data)
+        .then((data) => {
+          return data;
+        })
+        .catch((error) => console.log(error));
     }
   }
 };
@@ -146,10 +149,18 @@ export default {
   cursor: pointer;
 }
 
+.publications__card .publications__like-comment-count {
+  width: 92%;
+  height: fit-content;
+  margin: auto 0;
+  padding: 5px;
+  border-top: 1px solid white;
+}
 .publications__card .publications__like-comment {
   width: 95%;
-  margin-bottom: 5px;
-  padding-top: 5px;
+  height: fit-content;
+  margin: auto 0;
+  padding-top: 10px;
   display: flex;
   justify-content: space-around;
   border-top: 1px solid white;
