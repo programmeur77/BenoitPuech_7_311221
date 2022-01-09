@@ -1,18 +1,6 @@
 const { restart } = require('nodemon');
 const db = require('./../config/db');
 
-exports.getCommentCount = (req, res) => {
-  const getCountQuery = `SELECT COUNT(id) FROM comments WHERE postId = ${req.params.postId} AND active = 1`;
-
-  db.query(getCountQuery, (error, result) => {
-    if (!error) {
-      return res.status(201).json(result);
-    } else {
-      return res.status(500).json(error);
-    }
-  });
-};
-
 exports.getAllComments = (req, res) => {
   const firstGetJoinQuery = `SELECT firstName, lastName, comments.id, comments.commentContent, comments.comment_date FROM user JOIN comments ON user.id = comments.userId WHERE postId = ${req.params.postId} AND active = true`;
 
@@ -27,11 +15,21 @@ exports.getAllComments = (req, res) => {
 
 exports.postComment = (req, res) => {
   const postCommentQuery = `INSERT INTO comments (userId, postId, commentContent) VALUES(${req.body.userId}, ${req.body.postId}, "${req.body.commentContent}")`;
+  const updateQuery = ` UPDATE posts SET comment_count = comment_count + 1 WHERE id = ${req.body.postId} `;
   db.query(postCommentQuery, (error, result) => {
     if (!error) {
       return res.status(201).json(result.affectedRows);
     } else {
       return res.status(500).json([error]);
+    }
+  });
+
+  // UPDATE comment_count by adding 1 to the current number
+  db.query(updateQuery, (error, result) => {
+    if (!error) {
+      return res.status(201).json(result);
+    } else {
+      return res.status(400).json(error);
     }
   });
 };
@@ -57,6 +55,7 @@ exports.modifyComment = (req, res) => {
 exports.deleteComment = (req, res) => {
   const commentGetQuery = `SELECT userId FROM comments WHERE id = ${req.params.id}`;
   const commentDeleteQuery = `UPDATE comments SET active = 0 WHERE id = ${req.params.id}`;
+  const updateCommentCount = `UPDATE posts SET comment_count = comment_count - 1 WHERE id = ${req.params.id} `;
 
   db.query(commentGetQuery, (error, result) => {
     if (!error) {
@@ -73,6 +72,14 @@ exports.deleteComment = (req, res) => {
       }
     } else {
       res.status(500).json({ error });
+    }
+  });
+
+  db.query(updateCommentCount, (error, result) => {
+    if (!error) {
+      res.status(200).json({ message: 'Updated comment count' });
+    } else {
+      res.status(500).json(error);
     }
   });
 };
