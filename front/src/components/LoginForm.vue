@@ -1,5 +1,5 @@
 <template>
-  <form class="login" @submit="postData" method="post">
+  <form class="login" @submit="getUser" method="post">
     <div id="form__errorMsg"></div>
 
     <div class="form__identity" id="formIdentity" v-if="signupStatus === false">
@@ -84,25 +84,16 @@ export default {
     };
   },
   methods: {
-    postData: function (event) {
+    getUser: function (event) {
       event.preventDefault();
-      if (this.signupStatus === true) {
-        axios
-          .post('http://localhost:3000/api/user/login', this.posts)
-          .then((data) => {
-            if (data.status === 200) {
-              const userInfo = data.data;
-              const userData = {
-                userId: userInfo.userId,
-                userToken: userInfo.token
-              };
-              const userInfoString = JSON.stringify(userData);
-              localStorage.setItem('userSession', userInfoString);
-              this.$router.push('/wall');
-            }
-          })
-          .catch((error) => console.log(error));
-      }
+      axios
+        .post('http://localhost:3000/api/user/login', this.posts)
+        .then((response) => {
+          if (response.status === 200) {
+            localStorage.setItem('userSession', JSON.stringify(response.data));
+            this.$router.push('/wall');
+          }
+        });
     }
   }
 };
