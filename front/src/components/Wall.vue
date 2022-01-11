@@ -11,7 +11,7 @@
           <img :src="postContent.avatarUrl" alt="Photo de profil" />&nbsp;
           <span
             class="publications__author-profile"
-            @click="goToProfile(postContent.postId)"
+            @click="goToProfile(postContent.userId)"
           >
             {{ postContent.firstName }} {{ postContent.lastName }}
           </span>
@@ -85,7 +85,7 @@ import FaSolidComment from './CommentIcon.vue';
 import AddPostForm from './AddPost.vue';
 
 const userSessionData = JSON.parse(localStorage.getItem('userSession'));
-const sessionToken = userSessionData.userToken;
+const sessionToken = userSessionData.token;
 if (sessionToken) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + sessionToken;
 }
