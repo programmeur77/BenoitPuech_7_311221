@@ -1,6 +1,6 @@
 <template>
   <section class="add-post">
-    <form method="post" class="add-post__form">
+    <form method="post" class="add-post__form" @submit="postContent">
       <textarea
         name="postContent"
         class="form__write-post"
@@ -14,13 +14,19 @@
           <span class="add-image__icon-legend">Ajouter une image</span>
         </div>
       </div>
-      <button class="form__submit" @click.prevent="publishPost">Publier</button>
+      <button
+        class="form__submit"
+        @click.prevent="publishPost"
+        @click="postContent"
+      >
+        Publier
+      </button>
     </form>
   </section>
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 import ImageIcon from './ImageIcon.vue';
 
 const user = JSON.parse(localStorage.getItem('userSession'));
@@ -42,13 +48,18 @@ export default {
     };
   },
   methods: {
-    publishPost: function () {
-      axios
-        .post('http://localhost:3000/api/publications/post', this.publication)
-        .then(() => {
-          console.log('success');
-        })
-        .catch((error) => console.log(error));
+    // publishPost: function () {
+    //   axios
+    //     .post('http://localhost:3000/api/publications/post', this.publication)
+    //     .then(() => {
+    //       console.log('success');
+    //     })
+    //     .catch((error) => console.log(error));
+    // }
+    postContent: function (event) {
+      event.preventDefault();
+      this.$store.dispatch('addPublication', this.publication);
+      this.$router.go();
     }
   }
 };
