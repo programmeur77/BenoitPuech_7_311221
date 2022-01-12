@@ -48,14 +48,6 @@ export default {
     };
   },
   methods: {
-    // publishPost: function () {
-    //   axios
-    //     .post('http://localhost:3000/api/publications/post', this.publication)
-    //     .then(() => {
-    //       console.log('success');
-    //     })
-    //     .catch((error) => console.log(error));
-    // }
     postContent: function (event) {
       event.preventDefault();
       this.$store.dispatch('addPublication', this.publication);
