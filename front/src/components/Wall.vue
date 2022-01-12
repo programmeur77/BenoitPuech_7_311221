@@ -1,64 +1,61 @@
 <template>
-  <div v-if="result.length > 0">
+  <div v-if="publications.length > 0">
     <AddPostForm />
     <section
-      v-for="postContent in result"
-      :key="postContent.postId"
+      v-for="post in publications"
+      :key="post.postId"
       class="publications"
     >
-      <div v-bind:data-id="postContent.postId" class="publications__card">
-        <div class="publications__author" :data-user-id="postContent.userId">
-          <img :src="postContent.avatarUrl" alt="Photo de profil" />&nbsp;
+      <div v-bind:data-id="post.postId" class="publications__card">
+        <div class="publications__author" :data-user-id="post.userId">
+          <img :src="post.avatarUrl" alt="Photo de profil" />&nbsp;
           <span
             class="publications__author-profile"
-            @click="goToProfile(postContent.userId)"
+            @click="goToProfile(post.userId)"
           >
-            {{ postContent.firstName }} {{ postContent.lastName }}
+            {{ post.firstName }} {{ post.lastName }}
           </span>
         </div>
 
         <div
           class="publications__content"
-          v-if="
-            postContent.postContent !== null && postContent.postContent !== ''
-          "
+          v-if="post.postContent !== null && post.postContent !== ''"
         >
-          <p>{{ postContent.postContent }}</p>
+          <p>{{ post.postContent }}</p>
         </div>
 
         <div
           class="publications__content"
           v-else-if="
-            postContent.postContent === null ||
-            (postContent.postContent === '' &&
-              (postContent.imageUrl !== null || postContent.imageUrl !== ''))
+            post.postContent === null ||
+            (post.postContent === '' &&
+              (post.imageUrl !== null || post.imageUrl !== ''))
           "
         >
-          <img :src="postContent.imageUrl" alt="Image de publication" />
+          <img :src="post.imageUrl" alt="Image de publication" />
         </div>
 
         <div
           class="publications__content"
           v-else-if="
-            (postContent.postContent !== null ||
-              postContent.postContent !== '') &&
-            (postContent.imageUrl !== null || postContent.imageUrl !== '')
+            (post.postContent !== null || post.postContent !== '') &&
+            (post.imageUrl !== null || post.imageUrl !== '')
           "
         >
-          <p>{{ postContent.postContent }}</p>
-          <img :src="postContent.imageUrl" alt="Image de publication" />
+          <p>{{ post.postContent }}</p>
+          <img :src="post.imageUrl" alt="Image de publication" />
         </div>
 
         <div class="publications__date-time">
-          <p>Publié le {{ postContent.post_date }}</p>
+          <p>Publié le {{ post.post_date }}</p>
         </div>
 
         <div
           class="publications__like-comment-count"
-          v-if="postContent.comment_count > 0"
+          v-if="post.comment_count > 0"
         >
           <div class="publications__comment-count">
-            {{ postContent.comment_count }} commentaires
+            {{ post.comment_count }} commentaires
           </div>
         </div>
 
@@ -80,6 +77,8 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
+
 import FaSolidHeart from './Heart.vue';
 import FaSolidComment from './CommentIcon.vue';
 import AddPostForm from './AddPost.vue';
@@ -108,17 +107,14 @@ export default {
   },
   methods: {
     getResult: function () {
-      axios
-        .get('http://localhost:3000/api/publications')
-        .then((data) => data.data)
-        .then((publication) => {
-          this.result = publication;
-        })
-        .catch((error) => console.log(error));
+      this.$store.dispatch('setPublications');
     },
     goToProfile: function (userId) {
       this.$router.push(`/profile/${userId}`);
     }
+  },
+  computed: {
+    ...mapState(['publications'])
   }
 };
 </script>
