@@ -54,7 +54,10 @@
           class="publications__like-comment-count"
           v-if="post.comment_count > 0"
         >
-          <div class="publications__comment-count">
+          <div
+            class="publications__comment-count"
+            @click="goToComments(post.userId, post.postId)"
+          >
             {{ post.comment_count }} commentaires
           </div>
         </div>
@@ -67,11 +70,18 @@
 
           <div class="like-comment__comment" @click="comment = true">
             <FaSolidComment />
-            <span class="icon__legend">&nbsp;Commenter</span>
+            <span
+              class="icon__legend"
+              @click="goToComments(post.userId, post.postId)"
+              >&nbsp;Commenter</span
+            >
           </div>
         </div>
       </div>
     </section>
+  </div>
+  <div v-else-if="publications.length === 0">
+    <p>Aucune publication pour le moment</p>
   </div>
 </template>
 
@@ -98,7 +108,6 @@ export default {
   },
   data() {
     return {
-      result: [],
       comment: false
     };
   },
@@ -111,6 +120,9 @@ export default {
     },
     goToProfile: function (userId) {
       this.$router.push(`/profile/${userId}`);
+    },
+    goToComments: function (userId, postId) {
+      this.$router.push(`/comments/${userId}/${postId}`);
     }
   },
   computed: {
