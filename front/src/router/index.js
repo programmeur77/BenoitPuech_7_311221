@@ -17,7 +17,13 @@ const routes = [
     name: 'Profile',
     path: '/profile/:userId',
     component: () =>
-      import(/* webpackChunkName: "about" */ './../views/Profile.vue')
+      import(/* webpackChunkName: "profile" */ './../views/Profile.vue')
+  },
+  {
+    name: 'Comments',
+    path: '/comments/:userId/:postId',
+    component: () =>
+      import(/* webpackChunkName: "comments" */ './../views/Comments.vue')
   }
 ];
 
