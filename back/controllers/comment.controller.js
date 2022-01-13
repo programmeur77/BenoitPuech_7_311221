@@ -2,7 +2,7 @@ const { restart } = require('nodemon');
 const db = require('./../config/db');
 
 exports.getAllComments = (req, res) => {
-  const firstGetJoinQuery = `SELECT firstName, lastName, comments.id, comments.commentContent, comments.comment_date FROM user JOIN comments ON user.id = comments.userId WHERE postId = ${req.params.postId} AND active = true`;
+  const firstGetJoinQuery = `SELECT user.id AS userId, firstName, lastName, comments.id AS commentId, comments.commentContent, comments.comment_date FROM user JOIN comments ON user.id = comments.userId WHERE postId = ${req.params.postId} AND comments.active = true ORDER BY comment_date DESC`;
 
   db.query(firstGetJoinQuery, (error, result) => {
     if (!error) {
