@@ -38,7 +38,7 @@ exports.postPublication = (req, res) => {
 };
 
 exports.getOnePublication = (req, res) => {
-  const query = `SELECT user.id, firstName, lastName, posts.postContent, posts.imageUrl, posts.post_date FROM user JOIN posts ON posts.userId = user.id WHERE posts.id = ${req.params.id} AND active = 1`;
+  const query = `SELECT user.id AS userId, firstName, lastName, posts.id AS postId, posts.postContent, posts.imageUrl, posts.post_date FROM user JOIN posts ON posts.userId = user.id WHERE posts.id = ${req.params.id} AND posts.active = 1`;
 
   db.query(query, (error, result) => {
     if (!error) {
