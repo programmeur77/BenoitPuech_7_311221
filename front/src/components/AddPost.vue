@@ -26,12 +26,10 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import ImageIcon from './ImageIcon.vue';
 
 const user = JSON.parse(localStorage.getItem('userSession'));
 const userId = user.userId;
-// const token = user.userToken;
 
 export default {
   name: 'AddPostForm',
