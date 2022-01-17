@@ -4,6 +4,7 @@ import axios from 'axios';
 const store = createStore({
   state: {
     userSession: [],
+    userProfile: [],
     publications: [],
     onePublication: [],
     comments: []
@@ -11,6 +12,10 @@ const store = createStore({
   mutations: {
     SET_USER_SESSION(state, userSessionData) {
       state.userSession = userSessionData;
+    },
+
+    GET_USER_PROFILE(state, userProfile) {
+      state.userProfile = userProfile;
     },
 
     SET_PUBLICATIONS(state, publicationsGot) {
@@ -40,7 +45,17 @@ const store = createStore({
     setUserSession({ commit }, userLoginData) {
       axios
         .post('http://localhost:3000/api/user/login', userLoginData)
-        .then((response) => commit('SET_USER_SESSION', response.data))
+        .then((response) => {
+          commit('SET_USER_SESSION', response.data);
+        })
+        .catch((error) => console.log(error));
+    },
+    getUserProfile({ commit }, userId) {
+      axios
+        .get(`http://localhost:3000/api/user/${userId}`)
+        .then((response) => {
+          commit('GET_USER_PROFILE', response.data);
+        })
         .catch((error) => console.log(error));
     },
     setPublications({ commit }) {
