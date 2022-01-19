@@ -88,13 +88,13 @@
           <div class="publications__date-time">
             <p>Publié le {{ comment.comment_date }}</p>
           </div>
-          <!-- <div
+          <div
             class="publications__delete"
             v-if="comment.userId == this.$route.params.userId"
             @click="removeComment(comment.commentId)"
           >
             Supprimer
-          </div> -->
+          </div>
         </div>
       </section>
     </div>
