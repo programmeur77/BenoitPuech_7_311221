@@ -18,14 +18,14 @@
         type="text"
         class="user-profile__info-modify"
         name="firstName"
-        :value="profile.firstName"
+        v-model="userInfo.firstName"
         v-if="modifyProfile === true"
       />
       <input
         type="text"
         class="user-profile__info-modify"
-        name="firstName"
-        :value="profile.lastName"
+        name="lastName"
+        v-model="userInfo.lastName"
         @change="setNewLastName"
         v-if="modifyProfile === true"
       />
@@ -50,7 +50,7 @@
       </p>
 
       <p
-        @click="modifyProfile = false"
+        @click="updateProfile(this.$route.params.userId)"
         v-if="modifyProfile === true"
         class="text-link"
       >
@@ -76,8 +76,11 @@ export default {
     return {
       userId: '',
       modifyProfile: false,
-      modifiedUserFirstName: '',
-      modifiedUserLastName: ''
+      userInfo: {
+        firstName: '',
+        lastName: '',
+        userId: JSON.parse(userSessionData.userId)
+      }
     };
   },
   beforeMount() {
@@ -85,7 +88,12 @@ export default {
     this.getCurrentUserId();
   },
   methods: {
-    setNewLastName: function () {},
+    updateProfile: function (userId) {
+      axios
+        .put(`http://localhost:3000/api/user/${userId}`, this.userInfo)
+        .then(() => this.$router.go())
+        .catch((error) => console.log(error));
+    },
 
     getCurrentUserId: function () {
       this.userId = userSessionData.userId;
