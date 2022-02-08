@@ -24,7 +24,7 @@ exports.signup = (req, res) => {
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  const selectUserQuery = `SELECT id, email, password FROM user WHERE email = '${req.body.email}'`;
+  const selectUserQuery = `SELECT id, email, password, admin FROM user WHERE email = '${req.body.email}'`;
 
   db.query(selectUserQuery, function (error, result, field) {
     if (!result.length) {
@@ -41,7 +41,8 @@ exports.login = (req, res) => {
           userId: result[0].id,
           token: jwt.sign({ userId: result[0].id }, process.env.JWT_STRING, {
             expiresIn: '24h'
-          })
+          }),
+          admin: result[0].admin
         });
       })
       .catch((error) => res.status(500).error({ error }));
@@ -61,7 +62,10 @@ exports.getProfile = (req, res) => {
 };
 
 exports.modifyProfile = (req, res) => {
-  const modifyProfileQuery = `UPDATE user SET lastName = "${req.body.lastName}", firstName = "${req.body.firstName}", avatarUrl = "${req.body.avatarUrl}" WHERE id = ${req.body.userId}`;
+  const imgURL = `${req.protocol}://${req.get('host')}/images/${
+    req.file.filename
+  }`;
+  const modifyProfileQuery = `UPDATE user SET lastName = "${req.body.lastName}", firstName = "${req.body.firstName}", avatarUrl = "${imgURL}" WHERE id = ${req.body.userId}`;
   if (req.body.userId === req.auth.userId) {
     db.query(modifyProfileQuery, (error, result) => {
       if (!error) {
