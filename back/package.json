@@ -18,7 +18,8 @@
   "homepage": "https://github.com/programmeur77/BenoitPuech_7_31122021#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "multer": "^1.4.4"
   },
   "devDependencies": {
     "bcryptjs": "^2.4.3",
