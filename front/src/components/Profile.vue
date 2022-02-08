@@ -10,8 +10,15 @@
           'Photo de profil de ' + profile.firstName + ' ' + profile.lastName
         "
         class="profile-picture__image"
+      /><br />
+      <input
+        type="file"
+        name="avatar"
+        id="avatar"
+        v-if="modifyProfile === true"
+        :change="userInfo.avatarUrl"
       />
-      <p v-if="modifyProfile === true" class="text-link">Modifier</p>
+      {{ userInfo.avatarUrl }}
     </div>
     <div class="user-profile__info">
       <input
@@ -79,6 +86,7 @@ export default {
       userInfo: {
         firstName: '',
         lastName: '',
+        avatarUrl: '',
         userId: JSON.parse(userSessionData.userId)
       }
     };
