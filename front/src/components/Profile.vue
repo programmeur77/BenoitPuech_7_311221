@@ -3,28 +3,12 @@
     <h1 class="user-profile__title">
       Profil de {{ profile.firstName }} {{ profile.lastName }}
     </h1>
-    <div class="profile-picture">
-      <img
-        :src="profile.avatarUrl"
-        :alt="
-          'Photo de profil de ' + profile.firstName + ' ' + profile.lastName
-        "
-        class="profile-picture__image"
-      /><br />
-      <input
-        type="file"
-        name="avatar"
-        id="avatar"
-        v-if="modifyProfile === true"
-        :change="userInfo.avatarUrl"
-      />
-      {{ userInfo.avatarUrl }}
-    </div>
     <div class="user-profile__info">
       <input
         type="text"
         class="user-profile__info-modify"
         name="firstName"
+        placeholder="Prénom"
         v-model="userInfo.firstName"
         v-if="modifyProfile === true"
       />
@@ -32,6 +16,7 @@
         type="text"
         class="user-profile__info-modify"
         name="lastName"
+        placeholder="Nom"
         v-model="userInfo.lastName"
         @change="setNewLastName"
         v-if="modifyProfile === true"
@@ -86,7 +71,6 @@ export default {
       userInfo: {
         firstName: '',
         lastName: '',
-        avatarUrl: '',
         userId: JSON.parse(userSessionData.userId)
       }
     };
