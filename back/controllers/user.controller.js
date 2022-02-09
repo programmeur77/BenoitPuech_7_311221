@@ -62,10 +62,8 @@ exports.getProfile = (req, res) => {
 };
 
 exports.modifyProfile = (req, res) => {
-  const imgURL = `${req.protocol}://${req.get('host')}/images/${
-    req.file.filename
-  }`;
-  const modifyProfileQuery = `UPDATE user SET lastName = "${req.body.lastName}", firstName = "${req.body.firstName}", avatarUrl = "${imgURL}" WHERE id = ${req.body.userId}`;
+ 
+  const modifyProfileQuery = `UPDATE user SET lastName = "${req.body.lastName}", firstName = "${req.body.firstName}" WHERE id = ${req.body.userId}`;
   if (req.body.userId === req.auth.userId) {
     db.query(modifyProfileQuery, (error, result) => {
       if (!error) {
