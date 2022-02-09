@@ -50,6 +50,11 @@
           <p>Publié le {{ post.post_date }}</p>
         </div>
 
+        <div class="publications__delete" v-if="user.admin === 1">
+          <p class="publications__delete-txt" @click="deletePost(post.postId)">
+            Supprimer
+          </p>
+        </div>
         <div
           class="publications__like-comment-count"
           v-if="post.comment_count > 0"
@@ -57,6 +62,15 @@
           <div
             class="publications__comment-count"
             @click="goToComments(post.userId, post.postId)"
+            v-if="post.comment_count === 1"
+          >
+            {{ post.comment_count }} commentaire
+          </div>
+
+          <div
+            class="publications__comment-count"
+            @click="goToComments(post.userId, post.postId)"
+            v-else
           >
             {{ post.comment_count }} commentaires
           </div>
@@ -108,11 +122,14 @@ export default {
   },
   data() {
     return {
-      comment: false
+      comment: false,
+      user: [],
+      commentCount: 0
     };
   },
   beforeMount() {
     this.getResult();
+    this.getSession();
   },
   methods: {
     getResult: function () {
@@ -123,10 +140,27 @@ export default {
     },
     goToComments: function (userId, postId) {
       this.$router.push(`/comments/${userId}/${postId}`);
+    },
+    getSession: function () {
+      if (localStorage.userSession) {
+        this.user = JSON.parse(localStorage.userSession);
+      }
+    },
+    deletePost: function (postId) {
+      axios
+        .delete(`http://localhost:3000/api/publications/${postId}`)
+        .then(() => this.$router.go())
+        .catch((error) => console.log(error));
+    },
+    getComments: function (postId) {
+      this.$store.dispatch('getPublicationComments', postId);
     }
   },
   computed: {
-    ...mapState(['publications'])
+    ...mapState(['publications', 'comments']),
+    getCommentCount: function (postId) {
+      return postId;
+    }
   }
 };
 </script>
@@ -157,6 +191,11 @@ export default {
   color: grey;
 }
 
+.publications__card .publications__delete .publications__delete-txt {
+  margin-top: -5px;
+  font-size: 0.85rem;
+}
+
 .publications__card .publications__like-comment-count {
   width: 92%;
   height: fit-content;
@@ -182,7 +221,8 @@ export default {
 
 .publications__card .like-comment__like:hover,
 .publications__card .like-comment__comment:hover,
-.publications__card .publications__comment-count:hover {
+.publications__card .publications__comment-count:hover,
+.publications__card .publications__delete .publications__delete-txt:hover {
   cursor: pointer;
   color: #4b77be;
 }
