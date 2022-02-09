@@ -90,7 +90,9 @@ export default {
         .post('http://localhost:3000/api/user/login', this.posts)
         .then((response) => {
           if (response.status === 200) {
-            localStorage.setItem('userSession', JSON.stringify(response.data));
+            if (!localStorage.userSession) {
+              localStorage.userSession = JSON.stringify(response.data);
+            }
             this.$router.push('/wall');
           }
         });
