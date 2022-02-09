@@ -99,20 +99,20 @@ const store = createStore({
           commit('POST_COMMENT', response.data);
         })
         .catch((error) => console.log(error));
-    },
-
-    removeComment({ commit }, userId, commentToRemoveId) {
-      axios
-        .delete(
-          `http://localhost:3000/api/comments/${commentToRemoveId}`,
-          userId
-        )
-        .then((response) => {
-          commit('DELETE_COMMENT', response.data);
-          console.log(response.data);
-        })
-        .catch((error) => console.log(error));
     }
+
+    // removeComment({ commit }, userId, commentToRemoveId) {
+    //   axios
+    //     .delete(
+    //       `http://localhost:3000/api/comments/${commentToRemoveId}`,
+    //       userId
+    //     )
+    //     .then((response) => {
+    //       commit('DELETE_COMMENT', response.data);
+    //       console.log(response.data);
+    //     })
+    //     .catch((error) => console.log(error));
+    // }
   }
 });
 
